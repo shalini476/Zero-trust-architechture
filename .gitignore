@@ -1,0 +1,43 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+*.pyo
+
+# Environment and secrets — NEVER commit these
+.env
+*.env
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Flask instance folder (contains the SQLite database)
+instance/
+
+# Trained ML model artifacts
+ml_models/*.pkl
+ml_models/*.joblib
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# IDE / editor settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Pytest cache
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/

@@ -1,0 +1,272 @@
+/* Zerofox Zero Trust Design System */
+
+:root {
+    --bg-dark: #0b0f19;
+    --bg-card: rgba(17, 24, 39, 0.7);
+    --border-color: rgba(255, 255, 255, 0.08);
+    --primary: #00f2fe;
+    --primary-glow: rgba(0, 242, 254, 0.15);
+    --secondary: #4facfe;
+    --success: #00e676;
+    --warning: #ffb300;
+    --danger: #ff1744;
+    --text-muted: #ffffff;
+    --text-light: #ffffff;
+    --glass-blur: 12px;
+}
+
+
+body {
+    background-color: var(--bg-dark);
+    background-image: 
+        radial-gradient(at 0% 0%, rgba(0, 242, 254, 0.05) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(79, 172, 254, 0.05) 0px, transparent 50%);
+    color: var(--text-light);
+    font-family: 'Outfit', 'Inter', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Glassmorphism Cards */
+.glass-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+    border-color: rgba(0, 242, 254, 0.25);
+    box-shadow: 0 8px 32px 0 rgba(0, 242, 254, 0.08);
+}
+
+/* Authentication Layout */
+.auth-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 480px;
+    padding: 2.5rem;
+}
+
+/* Header Brand */
+.brand-glow {
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 10px var(--primary-glow));
+}
+
+/* Inputs & Form Styling */
+.form-control, .form-select {
+    background-color: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    color: var(--text-light) !important;
+    padding: 0.75rem 1rem;
+    transition: all 0.2s ease-in-out;
+}
+
+.form-control:focus, .form-select:focus {
+    background-color: rgba(255, 255, 255, 0.06);
+    border-color: var(--primary);
+    box-shadow: 0 0 10px var(--primary-glow);
+    outline: none;
+}
+
+.form-control::placeholder {
+    color: #ffffff;
+}
+
+.form-label {
+    font-weight: 500;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Custom Buttons */
+.btn-primary-custom {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border: none;
+    border-radius: 10px;
+    color: #ffffff;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary-custom:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 242, 254, 0.4);
+    opacity: 0.95;
+}
+
+.btn-primary-custom:active {
+    transform: translateY(0);
+}
+
+/* Alerts */
+.alert-custom {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    color: var(--text-light);
+}
+
+.alert-custom.alert-success {
+    border-left: 4px solid var(--success);
+    background: rgba(0, 230, 118, 0.05);
+}
+
+.alert-custom.alert-danger {
+    border-left: 4px solid var(--danger);
+    background: rgba(255, 23, 68, 0.05);
+}
+
+.alert-custom.alert-warning {
+    border-left: 4px solid var(--warning);
+    background: rgba(255, 179, 0, 0.05);
+}
+
+.alert-custom.alert-info {
+    border-left: 4px solid var(--secondary);
+    background: rgba(79, 172, 254, 0.05);
+}
+
+/* Security Indicators */
+.dot {
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.dot-active {
+    background-color: var(--success);
+    box-shadow: 0 0 10px var(--success);
+    animation: pulse 2s infinite;
+}
+
+.dot-error {
+    background-color: var(--danger);
+    box-shadow: 0 0 10px var(--danger);
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(0, 230, 118, 0.7);
+    }
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 8px rgba(0, 230, 118, 0);
+    }
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(0, 230, 118, 0);
+    }
+}
+
+/* Terminal Look Log Box */
+.terminal-box {
+    background-color: #060913 !important;
+    border: 1px solid rgba(0, 242, 254, 0.1) !important;
+    border-radius: 12px;
+    color: #39ff14 !important;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.85rem;
+    padding: 1.25rem;
+    max-height: 250px;
+    overflow-y: auto;
+}
+.terminal-line {
+    margin-bottom: 0.35rem;
+}
+.terminal-timestamp {
+    color: #ffffff;
+    margin-right: 0.5rem;
+}
+
+/* OTP Code inputs */
+.otp-container {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    margin: 1.5rem 0;
+}
+.otp-digit {
+    width: 45px;
+    height: 55px;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-color);
+    color: #fff;
+}
+.otp-digit:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 10px var(--primary-glow);
+    outline: none;
+}
+
+/* Ensure all text is visible */
+.text-muted {
+    color: #ffffff !important;
+}
+
+.text-secondary {
+    color: #ffffff !important;
+}
+
+.text-light {
+    color: #ffffff !important;
+}
+
+small {
+    color: #ffffff !important;
+}
+
+.small {
+    color: #ffffff !important;
+}
+
+/* Badge text colors */
+.badge {
+    color: #ffffff !important;
+}
+
+/* Table styling */
+table, th, td {
+    color: #ffffff !important;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(0, 242, 254, 0.1) !important;
+}
+
+/* Links */
+a {
+    color: #00f2fe;
+}
+
+/* Trust Score Badge Styling */
+.badge.bg-black {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+}

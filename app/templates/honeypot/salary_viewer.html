@@ -1,0 +1,71 @@
+{% extends 'dashboard_base.html' %}
+
+{% block dashboard_content %}
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0 text-white font-weight-bold">
+                <i class="fa-solid fa-file-excel text-success me-2"></i>Salary_Data_2026.xlsx
+            </h1>
+            <p class="text-muted mb-0">Sensitive salary and compensation data - Access logged and monitored</p>
+        </div>
+        <a href="{{ url_for('honeypot.index') }}" class="btn btn-outline-info">
+            <i class="fa-solid fa-arrow-left me-2"></i>Back to Portal
+        </a>
+    </div>
+
+    <!-- Data Table -->
+    <div class="glass-card p-4">
+        <div class="table-responsive">
+            <table class="table table-dark table-hover mb-0">
+                <thead>
+                    <tr class="border-secondary">
+                        {% for header in headers %}
+                        <th class="text-white text-uppercase small">{{ header }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if rows %}
+                        {% for row in rows %}
+                        <tr class="border-secondary">
+                            {% for cell in row %}
+                            <td class="text-white small">{{ cell }}</td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td colspan="100%" class="text-center text-muted py-4">No data available</td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Summary -->
+        <div class="mt-4 pt-3 border-top border-secondary">
+            <p class="text-muted small mb-2">
+                <i class="fa-solid fa-circle-info text-warning me-2"></i>
+                <strong>Security Notice:</strong> This file access has been logged as a suspicious activity. Your Trust Score has been reduced and security administrators have been notified.
+            </p>
+            <p class="text-muted small mb-0">
+                <i class="fa-solid fa-shield-halved text-danger me-2"></i>
+                Total Records: <span class="text-white">{{ rows|length }}</span>
+            </p>
+        </div>
+    </div>
+</div>
+
+<style>
+.table-hover tbody tr:hover {
+    background-color: rgba(0, 242, 254, 0.05) !important;
+}
+
+.table thead th {
+    border-bottom: 2px solid #4facfe !important;
+    color: #00f2fe !important;
+}
+</style>
+{% endblock %}

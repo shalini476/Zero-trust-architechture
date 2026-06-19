@@ -1,0 +1,146 @@
+{% extends 'dashboard_base.html' %}
+
+{% block dashboard_content %}
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0 text-white font-weight-bold"><i class="fa-solid fa-hard-drive text-info me-2"></i>Secure Document Drive</h1>
+            <p class="text-muted mb-0">Zerofox Solutions internal file storage portal.</p>
+        </div>
+        <span class="badge bg-dark border border-secondary text-muted px-3 py-2">
+            <i class="fa-solid fa-lock text-success me-2"></i>Zero Trust Policy Active
+        </span>
+    </div>
+
+    <!-- Info Notice -->
+    <div class="alert alert-custom alert-info mb-4">
+        <div class="d-flex">
+            <i class="fa-solid fa-circle-info fs-4 me-3 text-info mt-1"></i>
+            <div>
+                <h6 class="alert-heading fw-bold mb-1">Zero Trust Activity Inspection Notice</h6>
+                <p class="mb-0 text-muted small">
+                    Every file access transaction is evaluated in real-time by the Policy Enforcement Point (PEP) and mapped against your user profile baseline. Accessing unauthorized or restricted file traps will degrade your Trust Score and trigger a critical security alert.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Drive Sections -->
+    <div class="row">
+        <!-- Authorized Folder -->
+        <div class="col-lg-6 mb-4">
+            <div class="glass-card h-100 p-4">
+                <div class="d-flex align-items-center mb-4 border-bottom border-secondary pb-3">
+                    <i class="fa-solid fa-folder-open text-warning fs-3 me-3"></i>
+                    <div>
+                        <h5 class="mb-0 text-white fw-bold">Public Corporate Documents</h5>
+                        <p class="text-muted small mb-0">Accessible to all authenticated staff</p>
+                    </div>
+                </div>
+
+                <div class="list-group list-group-flush bg-transparent">
+                    <!-- File 1 -->
+                    <div class="list-group-item bg-transparent border-secondary px-0 py-3 d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <i class="fa-regular fa-file-pdf text-danger fs-4 me-3"></i>
+                            <div>
+                                <h6 class="mb-0 text-white">Employee_Handbook.pdf</h6>
+                                <span class="text-muted small">Size: 1.4 MB | Last Modified: Dec 2025</span>
+                            </div>
+                        </div>
+                        <a href="{{ url_for('honeypot.employee_handbook') }}" class="btn btn-sm btn-outline-info">
+                            <i class="fa-solid fa-download me-1"></i> Access File
+                        </a>
+                    </div>
+
+                    <!-- File 2 -->
+                    <div class="list-group-item bg-transparent border-0 px-0 py-3 d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <i class="fa-regular fa-file-pdf text-danger fs-4 me-3"></i>
+                            <div>
+                                <h6 class="mb-0 text-white">Asset_Guidelines.pdf</h6>
+                                <span class="text-muted small">Size: 2.8 MB | Last Modified: Jan 2026</span>
+                            </div>
+                        </div>
+                        <a href="{{ url_for('honeypot.asset_guidelines') }}" class="btn btn-sm btn-outline-info">
+                            <i class="fa-solid fa-download me-1"></i> Access File
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Restricted Folder (HONEYPOT TRAPS) -->
+        <div class="col-lg-6 mb-4">
+            <div class="glass-card h-100 p-4 border-danger-subtle">
+                <div class="d-flex align-items-center mb-4 border-bottom border-danger pb-3">
+                    <i class="fa-solid fa-folder-lock text-danger fs-3 me-3"></i>
+                    <div>
+                        <h5 class="mb-0 text-danger fw-bold">Vault / Admin_Confidential</h5>
+                        <p class="text-muted small mb-0"><i class="fa-solid fa-circle-exclamation text-danger me-1"></i> RESTRICTED: Requires Admin/HR permissions</p>
+                    </div>
+                </div>
+
+                <div class="list-group list-group-flush bg-transparent">
+                    <!-- Honey 1 -->
+                    <div class="list-group-item bg-transparent border-secondary px-0 py-3 d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <i class="fa-regular fa-file-excel text-success fs-4 me-3"></i>
+                            <div>
+                                <h6 class="mb-0 text-white">Salary_Data_2026.xlsx</h6>
+                                <span class="text-muted small">Size: 524 KB | Last Modified: May 2026</span>
+                            </div>
+                        </div>
+                        <a href="{{ url_for('honeypot.salary_data') }}" class="btn btn-sm btn-outline-danger">
+                            <i class="fa-solid fa-key me-1"></i> Access File
+                        </a>
+                    </div>
+
+                    <!-- Honey 2 -->
+                    <div class="list-group-item bg-transparent border-secondary px-0 py-3 d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <i class="fa-regular fa-file-pdf text-danger fs-4 me-3"></i>
+                            <div>
+                                <h6 class="mb-0 text-white">Employee_Payroll.pdf</h6>
+                                <span class="text-muted small">Size: 3.1 MB | Last Modified: Mar 2026</span>
+                            </div>
+                        </div>
+                        <a href="{{ url_for('honeypot.employee_payroll') }}" class="btn btn-sm btn-outline-danger">
+                            <i class="fa-solid fa-key me-1"></i> Access File
+                        </a>
+                    </div>
+
+                    <!-- Honey 3 -->
+                    <div class="list-group-item bg-transparent border-secondary px-0 py-3 d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <i class="fa-regular fa-file-pdf text-danger fs-4 me-3"></i>
+                            <div>
+                                <h6 class="mb-0 text-white">Financial_Records.pdf</h6>
+                                <span class="text-muted small">Size: 12.8 MB | Last Modified: Apr 2026</span>
+                            </div>
+                        </div>
+                        <a href="{{ url_for('honeypot.financial_records') }}" class="btn btn-sm btn-outline-danger">
+                            <i class="fa-solid fa-key me-1"></i> Access File
+                        </a>
+                    </div>
+
+                    <!-- Honey 4 -->
+                    <div class="list-group-item bg-transparent border-0 px-0 py-3 d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <i class="fa-regular fa-file-word text-info fs-4 me-3"></i>
+                            <div>
+                                <h6 class="mb-0 text-white">CEO_Strategic_Plan.docx</h6>
+                                <span class="text-muted small">Size: 122 KB | Last Modified: Jun 2026</span>
+                            </div>
+                        </div>
+                        <a href="{{ url_for('honeypot.ceo_plan') }}" class="btn btn-sm btn-outline-danger">
+                            <i class="fa-solid fa-key me-1"></i> Access File
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

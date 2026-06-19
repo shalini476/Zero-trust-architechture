@@ -1,0 +1,193 @@
+{% extends 'dashboard_base.html' %}
+
+{% block dashboard_content %}
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0 text-white font-weight-bold"><i class="fa-solid fa-gauge-high text-info me-2"></i>Security Control Center</h1>
+            <p class="text-muted mb-0">Zerofox Solutions Central Zero Trust Command Console.</p>
+        </div>
+        <span class="badge bg-dark border border-info text-info px-3 py-2">
+            <i class="fa-solid fa-server me-2"></i>PDP-PEP Connected
+        </span>
+    </div>
+
+    <!-- Summary Statistics Grid -->
+    <div class="row mb-4">
+        <!-- Card 1: Total Employees -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="glass-card p-3 d-flex align-items-center justify-content-between">
+                <div>
+                    <span class="text-muted small d-block">TOTAL EMPLOYEES</span>
+                    <h3 class="mb-0 text-white fw-bold mt-1">{{ total_users }}</h3>
+                </div>
+                <div class="bg-info-subtle text-info p-3 rounded-circle border border-info">
+                    <i class="fa-solid fa-users fs-4"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 2: Active Sessions -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="glass-card p-3 d-flex align-items-center justify-content-between">
+                <div>
+                    <span class="text-muted small d-block">ACTIVE EMPLOYEES</span>
+                    <h3 class="mb-0 text-success fw-bold mt-1">{{ active_users }}</h3>
+                </div>
+                <div class="bg-success-subtle text-success p-3 rounded-circle border border-success">
+                    <i class="fa-solid fa-circle-check fs-4"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 3: Security Alerts -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="glass-card p-3 d-flex align-items-center justify-content-between">
+                <div>
+                    <span class="text-muted small d-block">UNRESOLVED ALERTS</span>
+                    <h3 class="mb-0 text-danger fw-bold mt-1">{{ unresolved_count }}</h3>
+                </div>
+                <div class="bg-danger-subtle text-danger p-3 rounded-circle border border-danger">
+                    <i class="fa-solid fa-bell-exclamation fs-4 animate-pulse"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 4: Average Trust Posture -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="glass-card p-3 d-flex align-items-center justify-content-between">
+                <div>
+                    <span class="text-muted small d-block">AVG TRUST POSTURE</span>
+                    <h3 class="mb-0 fw-bold mt-1 {% if avg_trust >= 80 %}text-success{% elif avg_trust >= 50 %}text-warning{% else %}text-danger{% endif %}">
+                        {{ avg_trust }}/100
+                    </h3>
+                </div>
+                <div class="bg-warning-subtle text-warning p-3 rounded-circle border border-warning">
+                    <i class="fa-solid fa-shield-virus fs-4"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Analytics Charts Row -->
+    <div class="row mb-4">
+        <!-- Chart 1: Trust Score Distribution -->
+        <div class="col-lg-4 mb-4">
+            <div class="glass-card p-4 h-100">
+                <h5 class="text-white fw-bold mb-3"><i class="fa-solid fa-chart-pie text-info me-2"></i>Trust Distribution</h5>
+                <div style="height: 250px; position: relative;">
+                    <canvas id="trustChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart 2: ML Threat Classifications -->
+        <div class="col-lg-4 mb-4">
+            <div class="glass-card p-4 h-100">
+                <h5 class="text-white fw-bold mb-3"><i class="fa-solid fa-chart-column text-info me-2"></i>ML Threat Engine</h5>
+                <div style="height: 250px; position: relative;">
+                    <canvas id="threatChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart 3: Login Success vs Failures -->
+        <div class="col-lg-4 mb-4">
+            <div class="glass-card p-4 h-100">
+                <h5 class="text-white fw-bold mb-3"><i class="fa-solid fa-chart-line text-info me-2"></i>Login Activity Trends</h5>
+                <div style="height: 250px; position: relative;">
+                    <canvas id="trendsChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Tables Row -->
+    <div class="row">
+        <!-- Active User Directory -->
+        <div class="col-lg-8 mb-4">
+            <div class="glass-card p-4 h-100">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="text-white fw-bold mb-0"><i class="fa-solid fa-folder-tree text-info me-2"></i>Employee Identity Directory</h5>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover table-dark bg-transparent mb-0">
+                        <thead>
+                            <tr class="border-secondary text-info">
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Trust Score</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in users %}
+                            <tr class="border-secondary align-middle">
+                                <td>
+                                    <strong class="text-light">{{ user.username }}</strong>
+                                    {% if user == current_user %}
+                                    <span class="badge bg-info text-white ms-1" style="font-size: 0.6rem;">YOU</span>
+                                    {% endif %}
+                                </td>
+                                <td class="small text-muted">{{ user.email }}</td>
+                                <td>
+                                    <span class="badge bg-dark border border-secondary text-light">{{ user.role | upper }}</span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-black border border-secondary text-white px-2 py-1.5">
+                                        {{ user.trust_score }}/100
+                                    </span>
+                                </td>
+                                <td>
+                                    {% if user.is_active %}
+                                    <span class="text-success"><span class="dot dot-active me-1"></span> Active</span>
+                                    {% else %}
+                                    <span class="text-danger"><i class="fa-solid fa-ban me-1"></i> Blocked</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Critical Alerts -->
+        <div class="col-lg-4 mb-4">
+            <div class="glass-card p-4 h-100">
+                <h5 class="text-white fw-bold mb-3"><i class="fa-solid fa-circle-exclamation text-danger me-2"></i>Active Alerts (Recent)</h5>
+                
+                <div class="list-group list-group-flush bg-transparent">
+                    {% for alert in recent_alerts %}
+                    <a href="{{ url_for('monitoring.alerts') }}" class="list-group-item list-group-item-action bg-transparent border-secondary px-0 py-3 text-start">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="badge {% if alert.severity == 'critical' %}bg-danger text-white{% elif alert.severity == 'high' %}bg-danger{% else %}bg-warning text-white{% endif %} text-uppercase">
+                                {{ alert.severity }}
+                            </span>
+                            <small class="text-muted">{{ alert.timestamp.strftime('%H:%M') }}</small>
+                        </div>
+                        <p class="mb-0 text-white small fw-semibold">{{ alert.user.username }} : {{ alert.alert_type }}</p>
+                        <span class="text-muted small d-block text-truncate">{{ alert.description }}</span>
+                    </a>
+                    {% else %}
+                    <div class="text-center py-4 text-muted">
+                        <i class="fa-solid fa-shield-halved text-success fs-3 mb-2 d-block"></i>
+                        No active security alerts.
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block dashboard_scripts %}
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- Custom Dashboard Logic -->
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

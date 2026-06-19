@@ -1,0 +1,184 @@
+{% extends 'dashboard_base.html' %}
+
+{% block dashboard_content %}
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0 text-white font-weight-bold"><i class="fa-solid fa-user-shield text-info me-2"></i>My Security Profile</h1>
+            <p class="text-muted mb-0">Personal security standing and trust score tracking.</p>
+        </div>
+        <span class="badge bg-{{ status_class }} border border-{{ status_class }} text-white px-3 py-2 fw-bold">
+            POSTURE: {{ status_text }}
+        </span>
+    </div>
+
+    <div class="row">
+        <!-- Trust Meter Column -->
+        <div class="col-lg-4 mb-4">
+            <div class="glass-card p-4 text-center h-100 d-flex flex-column justify-content-between">
+                <div>
+                    <h5 class="text-white fw-bold mb-4 text-start"><i class="fa-solid fa-gauge text-info me-2"></i>Dynamic Trust Score</h5>
+                    
+                    <!-- Circular Meter -->
+                    <div class="position-relative d-inline-flex align-items-center justify-content-center my-3" style="width: 180px; height: 180px;">
+                        <svg class="position-absolute" style="width: 100%; height: 100%; transform: rotate(-90deg);">
+                            <circle cx="90" cy="90" r="80" stroke="rgba(255,255,255,0.05)" stroke-width="12" fill="transparent"/>
+                            <circle cx="90" cy="90" r="80" 
+                                    stroke="{% if current_user.trust_score >= 80 %}#00e676{% elif current_user.trust_score >= 50 %}#ffb300{% else %}#ff1744{% endif %}" 
+                                    stroke-width="12" 
+                                    stroke-dasharray="502" 
+                                    stroke-dashoffset="{{ 502 - (502 * current_user.trust_score / 100) }}"
+                                    fill="transparent" 
+                                    stroke-linecap="round"
+                                    style="transition: stroke-dashoffset 1s ease-out;"/>
+                        </svg>
+                        <div class="text-center">
+                            <h1 class="display-4 mb-0 fw-bold text-white">{{ current_user.trust_score }}</h1>
+                            <span class="text-muted small">out of 100</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-3">
+                        {% if current_user.trust_score >= 80 %}
+                        <p class="text-success fw-bold mb-1"><i class="fa-solid fa-circle-check me-1"></i> Trusted Posture</p>
+                        <span class="text-muted small">Your profile indicates standard compliance. Access to authorized resources is unrestricted.</span>
+                        {% elif current_user.trust_score >= 50 %}
+                        <p class="text-warning fw-bold mb-1"><i class="fa-solid fa-triangle-exclamation me-1"></i> Elevated Risk Warning</p>
+                        <span class="text-muted small">Minor anomalies detected. You may be requested for step-up security verification on restricted files.</span>
+                        {% else %}
+                        <p class="text-danger fw-bold mb-1"><i class="fa-solid fa-radiation me-1"></i> High Threat Posture</p>
+                        <span class="text-muted small">Critical security posture. System access is restricted. Contact network administrator for override.</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="mt-4 border-top border-secondary pt-3">
+                    <p class="text-muted small text-start">Trust score changes dynamically based on failed logins, device changes, session activity, or accessing honeypots.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ML Assessment and Explainable AI -->
+        <div class="col-lg-8 mb-4">
+            <div class="glass-card p-4 h-100 d-flex flex-column justify-content-between">
+                <div>
+                    <h5 class="text-white fw-bold mb-3"><i class="fa-solid fa-microchip text-info me-2"></i>Machine Learning Security Analysis</h5>
+                    
+                    {% if latest_ml %}
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3">
+                            <div class="card bg-dark border-secondary p-3">
+                                <span class="text-muted small d-block">AI EVALUATION CATEGORY</span>
+                                <h4 class="mb-0 mt-2 fw-bold {% if latest_ml.threat_classification == 'normal' %}text-success{% elif latest_ml.threat_classification == 'suspicious' %}text-warning{% else %}text-danger{% endif %}">
+                                    {{ latest_ml.threat_classification | upper }}
+                                </h4>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="card bg-dark border-secondary p-3">
+                                <span class="text-muted small d-block">COMPOSITE RISK RATING</span>
+                                <h4 class="mb-0 mt-2 fw-bold text-white">
+                                    {{ (100 - latest_ml.final_security_score) | int }}%
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Explainable AI Section -->
+                    <div class="border-top border-secondary pt-3">
+                        <h6 class="text-info fw-bold mb-3"><i class="fa-solid fa-magnifying-glass-chart me-1"></i>AI Audit Explanations (Why was this flagged?)</h6>
+                        <div class="terminal-box">
+                            {% if latest_ml.get_anomaly_reasons() %}
+                                {% for reason in latest_ml.get_anomaly_reasons() %}
+                                <div class="terminal-line"><span class="terminal-timestamp">[{{ latest_ml.timestamp.strftime('%H:%M:%S') }}]</span> <span class="text-warning">{{ reason }}</span></div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="terminal-line"><span class="terminal-timestamp">[{{ latest_ml.timestamp.strftime('%H:%M:%S') }}]</span> <span class="text-success">✓ Zero threat anomalies detected. Transaction fits historical baseline.</span></div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5 text-muted">
+                        <i class="fa-solid fa-brain-circuit fs-1 text-secondary mb-3 d-block"></i>
+                        No machine learning evaluations recorded yet. Log out and log back in to trigger behavioral profiling.
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="mt-4 border-top border-secondary pt-3">
+                    <span class="small text-muted"><i class="fa-solid fa-circle-nodes text-info me-1"></i> Powered by Isolation Forest & Random Forest Threat Classifiers.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Personal Activity Audit -->
+        <div class="col-lg-8 mb-4">
+            <div class="glass-card p-4">
+                <h5 class="text-white fw-bold mb-3"><i class="fa-solid fa-clock-rotate-left text-info me-2"></i>My Recent System Activity</h5>
+                <div class="table-responsive">
+                    <table class="table table-hover table-dark bg-transparent mb-0">
+                        <thead>
+                            <tr class="border-secondary text-info">
+                                <th>Timestamp</th>
+                                <th>Action</th>
+                                <th>Status</th>
+                                <th>IP Address</th>
+                                <th>Resource Accessed</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for log in personal_logs %}
+                            <tr class="border-secondary align-middle">
+                                <td class="small text-muted">{{ log.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+                                <td><span class="badge bg-dark border border-secondary text-light">{{ log.action }}</span></td>
+                                <td>
+                                    {% if log.status == 'SUCCESS' %}
+                                    <span class="text-success"><i class="fa-solid fa-circle-check me-1"></i> SUCCESS</span>
+                                    {% elif log.status == 'FAILED' %}
+                                    <span class="text-warning"><i class="fa-solid fa-circle-xmark me-1"></i> FAILED</span>
+                                    {% else %}
+                                    <span class="text-danger fw-bold"><i class="fa-solid fa-ban me-1"></i> BLOCKED</span>
+                                    {% endif %}
+                                </td>
+                                <td class="small text-muted">{{ log.ip_address }}</td>
+                                <td class="small text-white">{{ log.resource_accessed or '-' }}</td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="5" class="text-center py-3 text-muted">No personal activities logged.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Registered Devices -->
+        <div class="col-lg-4 mb-4">
+            <div class="glass-card p-4">
+                <h5 class="text-white fw-bold mb-3"><i class="fa-solid fa-laptop-code text-info me-2"></i>Registered Login Devices</h5>
+                <div class="list-group list-group-flush bg-transparent">
+                    {% for dev in devices %}
+                    <div class="list-group-item bg-transparent border-secondary px-0 py-3 d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <i class="fa-solid fa-display fs-4 me-3 text-info"></i>
+                            <div>
+                                <h6 class="mb-0 text-white font-monospace" style="font-size: 0.85rem;">{{ dev.device_fingerprint }}</h6>
+                                <span class="text-muted small">{{ dev.browser or 'Unknown' }}</span>
+                            </div>
+                        </div>
+                        <span class="badge bg-black text-white border border-secondary">TRUSTED</span>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-3 text-muted">No devices registered.</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

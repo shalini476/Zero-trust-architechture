@@ -1,0 +1,97 @@
+Log ID,Timestamp,Username,User Role,Action Type,Status,IP Address,Device Fingerprint,Browser/Client Info,Target Resource,Behavior Risk Score
+96,2026-06-19 04:54:37,admin,admin,ADAPTIVE_VERIFY,SUCCESS,127.0.0.1,DEV_DEV_C6BB4428,Google Chrome,,0.0
+95,2026-06-19 04:54:26,admin,admin,OTP_VERIFY,SUCCESS,127.0.0.1,DEV_DEV_C6BB4428,Google Chrome,,0.0
+94,2026-06-19 04:53:49,admin,admin,LOGIN_STEP1,SUCCESS,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.124.2 Chrome/148.0.7778.97 Electron/42.2.0 Safari/537.36",,0.0
+93,2026-06-19 04:13:11,admin,admin,ADAPTIVE_VERIFY,SUCCESS,127.0.0.1,DEV_DEV_159567323,Google Chrome,,0.0
+92,2026-06-19 04:13:04,admin,admin,TRUST_SCORE_UPDATE,SUCCESS,127.0.0.1,,,"Trust score changed: 35 → 25 (event=unusual_time, delta=-10).",0.0
+91,2026-06-19 04:13:04,admin,admin,OTP_VERIFY,SUCCESS,127.0.0.1,DEV_DEV_159567323,Google Chrome,,0.0
+90,2026-06-19 04:12:43,admin,admin,LOGIN_STEP1,SUCCESS,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36",,0.0
+89,2026-06-19 03:58:37,admin,admin,ADAPTIVE_VERIFY,SUCCESS,127.0.0.1,DEV_DEV_C6BB4428,Google Chrome,,0.0
+88,2026-06-19 03:58:31,admin,admin,TRUST_SCORE_UPDATE,SUCCESS,127.0.0.1,,,"Trust score changed: 40 → 35 (event=new_device, delta=-5).",0.0
+87,2026-06-19 03:58:31,admin,admin,OTP_VERIFY,SUCCESS,127.0.0.1,DEV_DEV_C6BB4428,Google Chrome,,0.0
+86,2026-06-19 03:57:36,admin,admin,LOGIN_STEP1,SUCCESS,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.124.2 Chrome/148.0.7778.97 Electron/42.2.0 Safari/537.36",,0.0
+85,2026-06-19 03:57:14,admin,admin,LOGIN_CREDENTIALS,FAILED,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.124.2 Chrome/148.0.7778.97 Electron/42.2.0 Safari/537.36",,0.0
+84,2026-06-19 03:57:14,admin,admin,TRUST_SCORE_UPDATE,SUCCESS,127.0.0.1,,,"Trust score changed: 45 → 40 (event=failed_login, delta=-5).",0.0
+83,2026-06-18 10:54:47,admin,admin,ADAPTIVE_VERIFY,SUCCESS,127.0.0.1,DEV_DEV_159567323,Google Chrome,,0.0
+82,2026-06-18 10:54:42,admin,admin,OTP_VERIFY,SUCCESS,127.0.0.1,DEV_DEV_159567323,Google Chrome,,0.0
+81,2026-06-18 10:54:13,admin,admin,LOGIN_STEP1,SUCCESS,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36",,0.0
+80,2026-06-18 10:51:17,muru,admin,ADAPTIVE_VERIFY,SUCCESS,127.0.0.1,DEV_DEV_D0E3F4C,Microsoft Edge,,0.0
+79,2026-06-18 10:51:07,muru,admin,OTP_VERIFY,SUCCESS,127.0.0.1,DEV_DEV_D0E3F4C,Microsoft Edge,,0.0
+78,2026-06-18 10:50:24,muru,admin,LOGIN_STEP1,SUCCESS,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0",,0.0
+77,2026-06-18 10:46:33,admin,admin,LOGIN_STEP1,SUCCESS,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36",,0.0
+76,2026-06-18 10:34:30,murgan,admin,ADAPTIVE_VERIFY,SUCCESS,127.0.0.1,DEV_DEV_C6BB4428,Google Chrome,,0.0
+75,2026-06-18 10:34:23,murgan,admin,TRUST_SCORE_UPDATE,SUCCESS,127.0.0.1,,,"Trust score changed: 90 → 75 (event=new_device, delta=-15).",0.0
+74,2026-06-18 10:34:23,murgan,admin,OTP_VERIFY,SUCCESS,127.0.0.1,DEV_DEV_C6BB4428,Google Chrome,,0.0
+73,2026-06-18 10:34:04,murgan,admin,LOGIN_STEP1,SUCCESS,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.124.2 Chrome/148.0.7778.97 Electron/42.2.0 Safari/537.36",,0.0
+72,2026-06-18 10:27:55,admin,admin,ADAPTIVE_VERIFY,SUCCESS,127.0.0.1,DEV_DEV_159567323,Google Chrome,,0.0
+71,2026-06-18 10:27:46,admin,admin,OTP_VERIFY,SUCCESS,127.0.0.1,DEV_DEV_159567323,Google Chrome,,0.0
+70,2026-06-18 10:26:24,admin,admin,LOGIN_STEP1,SUCCESS,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36",,0.0
+69,2026-06-18 10:25:51,john,employee,FILE_ACCESS,SUCCESS,127.0.0.1,,,Employee_Handbook.pdf,10.0
+68,2026-06-18 10:24:32,john,employee,ADAPTIVE_VERIFY,SUCCESS,127.0.0.1,DEV_DEV_159567323,Google Chrome,,0.0
+67,2026-06-18 10:24:21,john,employee,OTP_VERIFY,SUCCESS,127.0.0.1,DEV_DEV_159567323,Google Chrome,,0.0
+66,2026-06-18 10:23:48,john,employee,LOGIN_STEP1,SUCCESS,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36",,0.0
+65,2026-06-18 06:46:41,muru,admin,ADAPTIVE_VERIFY,SUCCESS,127.0.0.1,DEV_DEV_D0E3F4C,Microsoft Edge,,0.0
+64,2026-06-18 06:46:33,muru,admin,TRUST_SCORE_UPDATE,SUCCESS,127.0.0.1,,,"Trust score changed: 35 → 30 (event=unusual_time, delta=-5).",0.0
+63,2026-06-18 06:46:33,muru,admin,OTP_VERIFY,SUCCESS,127.0.0.1,DEV_DEV_D0E3F4C,Microsoft Edge,,0.0
+62,2026-06-18 06:45:57,muru,admin,LOGIN_STEP1,SUCCESS,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0",,0.0
+61,2026-06-18 06:44:02,john,employee,FILE_ACCESS,SUCCESS,127.0.0.1,,,Employee_Handbook.pdf,10.0
+60,2026-06-18 06:43:32,john,employee,ADAPTIVE_VERIFY,SUCCESS,127.0.0.1,DEV_DEV_159567323,Google Chrome,,0.0
+59,2026-06-18 06:43:26,john,employee,TRUST_SCORE_UPDATE,SUCCESS,127.0.0.1,,,"Trust score changed: 40 → 35 (event=unusual_time, delta=-5).",0.0
+58,2026-06-18 06:43:26,john,employee,OTP_VERIFY,SUCCESS,127.0.0.1,DEV_DEV_159567323,Google Chrome,,0.0
+57,2026-06-18 06:43:00,john,employee,TRUST_SCORE_UPDATE,SUCCESS,SYSTEM,,,"Trust score changed: 50 → 40 (event=otp_failed, delta=-10).",0.0
+56,2026-06-18 06:42:24,john,employee,LOGIN_STEP1,SUCCESS,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36",,0.0
+55,2026-06-18 06:40:44,admin,admin,ADAPTIVE_VERIFY,SUCCESS,127.0.0.1,DEV_DEV_159567323,Google Chrome,,0.0
+54,2026-06-18 06:40:37,admin,admin,TRUST_SCORE_UPDATE,SUCCESS,127.0.0.1,,,"Trust score changed: 60 → 45 (event=new_device, delta=-15).",0.0
+53,2026-06-18 06:40:37,admin,admin,OTP_VERIFY,SUCCESS,127.0.0.1,DEV_DEV_159567323,Google Chrome,,0.0
+52,2026-06-18 06:39:46,admin,admin,LOGIN_STEP1,SUCCESS,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36",,0.0
+51,2026-06-18 06:16:26,admin,admin,ADAPTIVE_VERIFY,SUCCESS,127.0.0.1,DEV_DEV_D0E3F4C,Microsoft Edge,,0.0
+50,2026-06-18 06:15:40,admin,admin,OTP_VERIFY,SUCCESS,127.0.0.1,DEV_DEV_D0E3F4C,Microsoft Edge,,0.0
+49,2026-06-18 06:15:17,admin,admin,LOGIN_STEP1,SUCCESS,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0",,0.0
+48,2026-06-18 06:14:33,admin,admin,ADAPTIVE_VERIFY,FAILED,127.0.0.1,DEV_DEV_C6BB4428,,,0.0
+47,2026-06-18 06:14:27,admin,admin,OTP_VERIFY,SUCCESS,127.0.0.1,DEV_DEV_C6BB4428,Google Chrome,,0.0
+46,2026-06-18 06:12:22,admin,admin,LOGIN_STEP1,SUCCESS,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.124.2 Chrome/148.0.7778.97 Electron/42.2.0 Safari/537.36",,0.0
+45,2026-06-18 05:38:25,admin,admin,LOGIN_STEP1,SUCCESS,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36",,0.0
+44,2026-06-18 05:37:06,admin,admin,LOGIN_STEP1,SUCCESS,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0",,0.0
+43,2026-06-18 05:28:25,muru,admin,LOGIN_STEP1,SUCCESS,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0",,0.0
+42,2026-06-18 05:27:40,muru,admin,LOGIN_STEP1,SUCCESS,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0",,0.0
+41,2026-06-18 05:26:45,admin,admin,LOGIN_STEP1,SUCCESS,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0",,0.0
+40,2026-06-18 05:25:34,muru,admin,LOGIN_STEP1,SUCCESS,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0",,0.0
+39,2026-06-18 05:24:51,muru,admin,LOGIN_STEP1,SUCCESS,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0",,0.0
+38,2026-06-18 05:24:17,muru,admin,LOGIN_STEP1,SUCCESS,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0",,0.0
+37,2026-06-18 05:24:14,muru,admin,LOGIN_STEP1,SUCCESS,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0",,0.0
+36,2026-06-18 05:20:22,john,employee,LOGIN_STEP1,SUCCESS,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36",,0.0
+35,2026-06-18 05:19:02,john,employee,LOGIN_STEP1,SUCCESS,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36",,0.0
+34,2026-06-18 05:04:00,john,employee,LOGIN_STEP1,SUCCESS,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36",,0.0
+33,2026-06-18 05:02:15,john,employee,LOGIN_STEP1,SUCCESS,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36",,0.0
+32,2026-06-18 05:01:43,murgan,admin,LOGIN_STEP1,SUCCESS,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0",,0.0
+31,2026-06-18 05:01:11,muru,admin,LOGIN_STEP1,SUCCESS,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0",,0.0
+30,2026-06-18 05:00:00,muru,admin,LOGIN_STEP1,SUCCESS,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0",,0.0
+29,2026-06-18 04:59:58,muru,admin,LOGIN_STEP1,SUCCESS,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0",,0.0
+28,2026-06-18 04:59:14,muru,admin,LOGIN_STEP1,SUCCESS,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0",,0.0
+27,2026-06-18 04:53:27,muru,admin,LOGIN_STEP1,SUCCESS,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0",,0.0
+26,2026-06-18 04:14:32,muru,admin,ADAPTIVE_VERIFY,SUCCESS,127.0.0.1,DEV_DEV_D0E3F4C,Microsoft Edge,,0.0
+25,2026-06-18 04:14:25,muru,admin,OTP_VERIFY,SUCCESS,127.0.0.1,DEV_DEV_D0E3F4C,Microsoft Edge,,0.0
+24,2026-06-18 04:09:54,muru,admin,LOGIN_STEP1,SUCCESS,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0",,0.0
+23,2026-06-17 14:57:37,muru,admin,LOGIN_CREDENTIALS,FAILED,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0",,0.0
+22,2026-06-17 10:51:13,admin,admin,OTP_VERIFY,SUCCESS,127.0.0.1,DEV_DEV_D0E3F4C,Microsoft Edge,,0.0
+21,2026-06-17 10:51:05,admin,admin,LOGIN_STEP1,SUCCESS,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0",,0.0
+20,2026-06-17 10:37:06,muru,admin,ADAPTIVE_VERIFY,SUCCESS,127.0.0.1,DEV_DEV_D0E3F4C,Microsoft Edge,,0.0
+19,2026-06-17 10:36:53,muru,admin,OTP_VERIFY,SUCCESS,127.0.0.1,DEV_DEV_D0E3F4C,Microsoft Edge,,0.0
+18,2026-06-17 10:36:44,muru,admin,LOGIN_STEP1,SUCCESS,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0",,0.0
+17,2026-06-17 10:36:34,System,N/A,LOGIN_CREDENTIALS,FAILED,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0",,0.0
+16,2026-06-17 09:12:41,john,employee,HONEYPOT_TRIGGER,BLOCKED,127.0.0.1,,,Financial_Records.pdf,100.0
+15,2026-06-17 09:11:53,john,employee,OTP_VERIFY,SUCCESS,127.0.0.1,DEV_DEV_159567323,Google Chrome,,0.0
+14,2026-06-17 09:11:26,john,employee,LOGIN_STEP1,SUCCESS,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36",,0.0
+13,2026-06-17 09:05:21,muru,admin,HONEYPOT_TRIGGER,BLOCKED,127.0.0.1,,,Salary_Data_2026.xlsx,100.0
+12,2026-06-17 09:03:59,muru,admin,OTP_VERIFY,SUCCESS,127.0.0.1,DEV_DEV_D0E3F4C,Microsoft Edge,,0.0
+11,2026-06-17 09:03:16,muru,admin,LOGIN_STEP1,SUCCESS,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0",,0.0
+10,2026-06-17 09:03:06,System,N/A,LOGIN_CREDENTIALS,FAILED,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0",,0.0
+9,2026-06-17 08:59:41,System,N/A,LOGIN_CREDENTIALS,FAILED,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.124.2 Chrome/148.0.7778.97 Electron/42.2.0 Safari/537.36",,0.0
+8,2026-06-17 08:59:15,murgan,admin,LOGIN_CREDENTIALS,FAILED,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.124.2 Chrome/148.0.7778.97 Electron/42.2.0 Safari/537.36",,0.0
+7,2026-06-17 08:58:53,System,N/A,LOGIN_CREDENTIALS,FAILED,127.0.0.1,,"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.124.2 Chrome/148.0.7778.97 Electron/42.2.0 Safari/537.36",,0.0
+6,2026-06-17 06:54:34,charlie,employee,LOGIN_CREDENTIALS,FAILED,203.0.113.5,,,,50.0
+5,2026-06-17 06:52:34,charlie,employee,LOGIN_CREDENTIALS,FAILED,203.0.113.5,,,,45.0
+4,2026-06-17 04:52:34,alice,hr,LOGIN_SUCCESS,SUCCESS,192.168.1.10,DEV_DEV_E53D8F,,,15.0
+3,2026-06-16 08:52:34,bob,finance,LOGIN_SUCCESS,SUCCESS,192.168.1.22,DEV_DEV_92A1B2,,,12.0
+1,2026-06-15 08:52:34,charlie,employee,LOGIN_SUCCESS,SUCCESS,192.168.1.15,DEV_DEV_5A3B8C,,,10.0
+2,2026-06-15 08:52:34,charlie,employee,FILE_ACCESS,SUCCESS,192.168.1.15,,,Employee_Handbook.pdf,5.0

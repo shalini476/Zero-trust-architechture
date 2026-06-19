@@ -1,0 +1,143 @@
+{% extends 'dashboard_base.html' %}
+
+{% block dashboard_content %}
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0 text-white font-weight-bold"><i class="fa-solid fa-bell text-info me-2"></i>Security Alerts Feed</h1>
+            <p class="text-muted mb-0">Active threat triggers and perimeter violations requiring review.</p>
+        </div>
+    </div>
+
+    <!-- Active Unresolved Alerts -->
+    <div class="glass-card p-4 mb-4 border-danger-subtle">
+        <h5 class="text-danger fw-bold mb-3 d-flex align-items-center">
+            <i class="fa-solid fa-triangle-exclamation me-2 animate-pulse"></i> Unresolved Security Incidents
+            <span class="badge bg-danger ms-2 font-size-sm">{{ unresolved | length }}</span>
+        </h5>
+
+        <div class="table-responsive">
+            <table class="table table-hover table-dark bg-transparent mb-0">
+                <thead>
+                    <tr class="border-secondary text-info">
+                        <th>Timestamp</th>
+                        <th>User</th>
+                        <th>Alert Type</th>
+                        <th>Severity</th>
+                        <th>Description</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for alert in unresolved %}
+                    <tr class="border-secondary align-middle">
+                        <td class="small text-muted">{{ alert.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                        <td>
+                            <strong class="text-light">{{ alert.user.username }}</strong>
+                            <span class="text-muted small d-block">Role: {{ alert.user.role }}</span>
+                        </td>
+                        <td>
+                            <span class="badge bg-dark border border-secondary text-white">{{ alert.alert_type }}</span>
+                        </td>
+                        <td>
+                            {% if alert.severity == 'critical' %}
+                            <span class="badge bg-danger text-dark fw-bold animate-pulse-critical px-2 py-1.5"><i class="fa-solid fa-radiation me-1"></i> CRITICAL</span>
+                            {% elif alert.severity == 'high' %}
+                            <span class="badge bg-danger text-white px-2 py-1.5"><i class="fa-solid fa-circle-exclamation me-1"></i> HIGH</span>
+                            {% elif alert.severity == 'medium' %}
+                            <span class="badge bg-warning text-dark px-2 py-1.5"><i class="fa-solid fa-triangle-exclamation me-1"></i> MEDIUM</span>
+                            {% else %}
+                            <span class="badge bg-info text-dark px-2 py-1.5"><i class="fa-solid fa-circle-info me-1"></i> LOW</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-light small">{{ alert.description }}</td>
+                        <td class="text-end">
+                            <form method="POST" action="{{ url_for('monitoring.resolve_alert', alert_id=alert.id) }}" class="d-inline">
+                                <button type="submit" class="btn btn-sm btn-outline-success">
+                                    <i class="fa-solid fa-check me-1"></i> Mark Resolved
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center py-4 text-muted">
+                            <i class="fa-solid fa-circle-check text-success fs-3 mb-2 d-block"></i>
+                            All systems normal. No unresolved alerts.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Resolved Alerts (Recent) -->
+    <div class="glass-card p-4">
+        <h5 class="text-success fw-bold mb-3 d-flex align-items-center">
+            <i class="fa-solid fa-shield-halved me-2"></i> Recently Resolved Alerts
+        </h5>
+
+        <div class="table-responsive">
+            <table class="table table-hover table-dark bg-transparent mb-0">
+                <thead>
+                    <tr class="border-secondary text-muted">
+                        <th>Timestamp</th>
+                        <th>User</th>
+                        <th>Alert Type</th>
+                        <th>Severity</th>
+                        <th>Description</th>
+                        <th>Resolved By</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for alert in resolved %}
+                    <tr class="border-secondary align-middle text-muted">
+                        <td class="small">{{ alert.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                        <td>{{ alert.user.username }}</td>
+                        <td><span class="badge bg-dark border border-secondary text-muted">{{ alert.alert_type }}</span></td>
+                        <td>
+                            <span class="badge bg-secondary text-muted px-2 py-1">{{ alert.severity | upper }}</span>
+                        </td>
+                        <td class="small">{{ alert.description }}</td>
+                        <td class="small text-success">
+                            <i class="fa-solid fa-user-shield me-1"></i> {{ alert.resolver.username if alert.resolver else 'Admin' }}
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center py-3 text-muted">No recently resolved incidents.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Pulse Animations for Critical Alerts */
+    .animate-pulse {
+        animation: pulse-icon 1.5s infinite;
+    }
+    
+    @keyframes pulse-icon {
+        0% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.15); opacity: 0.7; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+    
+    .animate-pulse-critical {
+        background-color: var(--danger) !important;
+        box-shadow: 0 0 10px var(--danger);
+        animation: pulse-critical-bg 1.5s infinite;
+    }
+    
+    @keyframes pulse-critical-bg {
+        0% { box-shadow: 0 0 0 0 rgba(255, 23, 68, 0.7); }
+        70% { box-shadow: 0 0 0 6px rgba(255, 23, 68, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(255, 23, 68, 0); }
+    }
+</style>
+{% endblock %}

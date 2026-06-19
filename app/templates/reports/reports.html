@@ -1,0 +1,97 @@
+{% extends 'dashboard_base.html' %}
+
+{% block dashboard_content %}
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0 text-white font-weight-bold"><i class="fa-solid fa-file-invoice text-info me-2"></i>Security Reporting Center</h1>
+            <p class="text-muted mb-0">Generate, compile, and download formal security audits and employee behavioral risk reports.</p>
+        </div>
+        <span class="badge bg-dark border border-secondary text-muted px-3 py-2">
+            <i class="fa-solid fa-file-shield text-success me-2"></i>Audit Compliance Compliant
+        </span>
+    </div>
+
+    <!-- Info Notice -->
+    <div class="alert alert-custom alert-info mb-4">
+        <div class="d-flex">
+            <i class="fa-solid fa-circle-info fs-4 me-3 text-info mt-1"></i>
+            <div>
+                <h6 class="alert-heading fw-bold mb-1">Audit Compliance Export Information</h6>
+                <p class="mb-0 text-muted small">
+                    This reporting engine extracts live logs directly from the SQLite database. CSV formatting compiles raw activity vectors suitable for external SIEM integration. PDF formatting compiles official executive audit reports, including trust distribution summaries, alert statuses, and the latest access logs.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- PDF Report Generation Card -->
+        <div class="col-lg-6 mb-4">
+            <div class="glass-card p-4 h-100 d-flex flex-column justify-content-between">
+                <div>
+                    <div class="d-flex align-items-center mb-4 border-bottom border-secondary pb-3">
+                        <div class="bg-danger-subtle text-danger p-3 rounded border border-danger me-3">
+                            <i class="fa-solid fa-file-pdf fs-3"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0 text-white fw-bold">Executive Audit Report (PDF)</h5>
+                            <p class="text-muted small mb-0">Formally styled, printable PDF report</p>
+                        </div>
+                    </div>
+
+                    <p class="text-muted small mb-4">
+                        Packs current security baseline statistics, employee trust standings, unresolved critical alerts, UBA risk logs, and the latest 10 transactional activities into a printable document styled with TechNova branding. Suitable for weekly compliance reports.
+                    </p>
+
+                    <div class="card bg-dark border-secondary p-3 mb-4">
+                        <ul class="list-unstyled mb-0 small text-muted">
+                            <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i>Includes executive metrics summary table</li>
+                            <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i>Filters active unresolved threat instances</li>
+                            <li><i class="fa-solid fa-check text-success me-2"></i>Serializes latest 10 login & file accesses</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <a href="{{ url_for('reports.export_pdf') }}" class="btn btn-danger btn-lg w-100 fw-bold">
+                    <i class="fa-solid fa-file-arrow-down me-2"></i>DOWNLOAD AUDIT REPORT (PDF)
+                </a>
+            </div>
+        </div>
+
+        <!-- CSV Export Card -->
+        <div class="col-lg-6 mb-4">
+            <div class="glass-card p-4 h-100 d-flex flex-column justify-content-between">
+                <div>
+                    <div class="d-flex align-items-center mb-4 border-bottom border-secondary pb-3">
+                        <div class="bg-success-subtle text-success p-3 rounded border border-success me-3">
+                            <i class="fa-solid fa-file-csv fs-3"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0 text-white fw-bold">Raw Activity Logs (CSV)</h5>
+                            <p class="text-muted small mb-0">Standard comma-separated spreadsheet data</p>
+                        </div>
+                    </div>
+
+                    <p class="text-muted small mb-4">
+                        Exports the entire database log repository including timestamps, usernames, roles, event actions (credentials checking, OTP, file access, honeypots), IP addresses, client user-agents, and transaction risk scores. Suitable for importing into Excel or SIEM setups.
+                    </p>
+
+                    <div class="card bg-dark border-secondary p-3 mb-4">
+                        <ul class="list-unstyled mb-0 small text-muted">
+                            <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i>Complete raw dataset extraction</li>
+                            <li class="mb-2"><i class="fa-solid fa-check text-success me-2"></i>Includes device and IP fingerprint signatures</li>
+                            <li><i class="fa-solid fa-check text-success me-2"></i>Ideal for spreadsheets & external analytics</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <a href="{{ url_for('reports.export_csv') }}" class="btn btn-success btn-lg w-100 fw-bold">
+                    <i class="fa-solid fa-file-csv me-2"></i>EXPORT ALL LOGS TO SPREADSHEET (CSV)
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

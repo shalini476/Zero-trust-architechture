@@ -1,0 +1,272 @@
+{% extends 'dashboard_base.html' %}
+
+{% block dashboard_content %}
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0 text-white font-weight-bold"><i class="fa-solid fa-bug text-danger me-2"></i>Security Threat Simulator</h1>
+            <p class="text-muted mb-0">Evaluate Policy Enforcement Points (PEP) and Machine Learning models using active test scenarios.</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Input Control Panel -->
+        <div class="col-lg-5 mb-4">
+            <div class="glass-card p-4 h-100">
+                <h5 class="text-white fw-bold mb-4 border-bottom border-secondary pb-2">
+                    <i class="fa-solid fa-sliders text-info me-2"></i>Simulation Configurator
+                </h5>
+
+                <div class="mb-4">
+                    <label for="targetUser" class="form-label text-info fw-semibold">1. Select Target Employee Profile:</label>
+                    <select class="form-select text-white bg-dark border-secondary" id="targetUser">
+                        {% for user in users %}
+                        <option value="{{ user.id }}">{{ user.username }} (Role: {{ user.role | upper }} | Trust: {{ user.trust_score }}%)</option>
+                        {% else %}
+                        <option value="">No employees available</option>
+                        {% endfor %}
+                    </select>
+                    <span class="text-muted small d-block mt-1">Select the user whose behavior baseline will be attacked.</span>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label text-info fw-semibold">2. Choose Attack Scenario Vector:</label>
+                    
+                    <!-- Scenario A: Brute Force -->
+                    <div class="card bg-dark border-secondary p-3 mb-3 hover-glow" onclick="selectScenario('brute_force')">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="scenario" id="scen_brute" value="brute_force" checked>
+                            <label class="form-check-label text-white fw-bold" for="scen_brute">
+                                A. Credential Brute-Force
+                            </label>
+                            <p class="text-muted small mb-0 mt-1">
+                                Injects 8 rapid failed login credentials in 10 minutes. Triggers brute-force alerts and reduces user trust score.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Scenario B: Credential Theft -->
+                    <div class="card bg-dark border-secondary p-3 mb-3 hover-glow" onclick="selectScenario('credential_theft')">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="scenario" id="scen_theft" value="credential_theft">
+                            <label class="form-check-label text-white fw-bold" for="scen_theft">
+                                B. Credential Theft (Off-Hours)
+                            </label>
+                            <p class="text-muted small mb-0 mt-1">
+                                Injects successful login from a new device, new browser, and foreign IP at 3:00 AM. Evaluated as suspicious behavior.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Scenario C: Insider Threat -->
+                    <div class="card bg-dark border-secondary p-3 mb-3 hover-glow" onclick="selectScenario('insider_threat')">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="scenario" id="scen_insider" value="insider_threat">
+                            <label class="form-check-label text-white fw-bold" for="scen_insider">
+                                C. Insider Data Harvesting
+                            </label>
+                            <p class="text-muted small mb-0 mt-1">
+                                Injects 12 safe file downloads within 2 minutes. Tests file-access velocity filters and flags insider threat behavior.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Scenario D: Honeypot Access -->
+                    <div class="card bg-dark border-secondary p-3 hover-glow" onclick="selectScenario('honeypot_access')">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="scenario" id="scen_honey" value="honeypot_access">
+                            <label class="form-check-label text-white fw-bold" for="scen_honey">
+                                D. Honeypot Intrusion
+                            </label>
+                            <p class="text-muted small mb-0 mt-1">
+                                Injects an access attempt to a restricted payroll file (honeypot trap). Triggers immediate critical alerts.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-danger btn-lg w-100 fw-bold" id="btnInject" onclick="runSimulation()">
+                    <i class="fa-solid fa-radiation-hazard me-2"></i> INJECT ATTACK SCENARIO
+                </button>
+            </div>
+        </div>
+
+        <!-- Terminal Log Window -->
+        <div class="col-lg-7 mb-4">
+            <div class="glass-card p-4 h-100 d-flex flex-column justify-content-between">
+                <div>
+                    <h5 class="text-white fw-bold mb-3 d-flex justify-content-between align-items-center">
+                        <span><i class="fa-solid fa-terminal text-success me-2"></i>Intrusion Analysis Terminal</span>
+                        <span class="badge bg-success-subtle text-success small font-monospace">ONLINE</span>
+                    </h5>
+                    
+                    <div class="terminal-box bg-dark p-3 rounded" style="height: 380px; max-height: 380px;" id="terminalConsole">
+                        <div class="terminal-line"><span class="text-muted">[*] System ready. Waiting for scenario injection...</span></div>
+                        <div class="terminal-line"><span class="text-muted">[*] Zero Trust Policies and ML Engine are active.</span></div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mt-3 border-top border-secondary pt-3">
+                    <span class="small text-muted"><i class="fa-solid fa-microchip text-info me-1"></i> PEP intercepts decisions, calculates scores, and serializes warnings.</span>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="clearConsole()"><i class="fa-solid fa-trash me-1"></i>Clear Terminal</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Historical Log -->
+    <div class="glass-card p-4">
+        <h5 class="text-white fw-bold mb-3"><i class="fa-solid fa-history text-info me-2"></i>Recent Simulations Run</h5>
+        <div class="table-responsive">
+            <table class="table table-hover table-dark bg-transparent mb-0">
+                <thead>
+                    <tr class="border-secondary text-info">
+                        <th>Timestamp</th>
+                        <th>Admin Operator</th>
+                        <th>Type</th>
+                        <th>Target User</th>
+                        <th>Trust After</th>
+                        <th>ML Risk Result</th>
+                    </tr>
+                </thead>
+                <tbody id="simTableBody">
+                    {% for sim in simulations %}
+                    <tr class="border-secondary align-middle">
+                        <td class="small text-muted">{{ sim.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                        <td>{{ sim.admin_id }} (Admin)</td>
+                        <td><span class="badge bg-dark border border-secondary text-light">{{ sim.simulation_type | upper }}</span></td>
+                        <td>{{ sim.target_user_id }}</td>
+                        <td>
+                            {% set res = sim.get_result() %}
+                            <span class="fw-bold text-white" style="background-color: #000000; padding: 0.4rem 0.8rem; border-radius: 6px; display: inline-block;">
+                                {{ res.trust_score_after }}/100
+                            </span>
+                        </td>
+                        <td>
+                            {% if res.ml_rating == 'HIGH_RISK' %}
+                            <span class="badge bg-danger text-white">{{ res.ml_rating }}</span>
+                            {% elif res.ml_rating == 'SUSPICIOUS' %}
+                            <span class="badge bg-warning text-white">{{ res.ml_rating }}</span>
+                            {% else %}
+                            <span class="badge bg-success text-white">{{ res.ml_rating }}</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center py-3 text-muted">No threat simulations launched yet.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .hover-glow {
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    .hover-glow:hover {
+        border-color: rgba(255, 23, 68, 0.4) !important;
+        background-color: rgba(255, 23, 68, 0.02) !important;
+    }
+    .form-check-input:checked + .form-check-label {
+        color: var(--primary) !important;
+    }
+</style>
+{% endblock %}
+
+{% block dashboard_scripts %}
+<script>
+    function selectScenario(type) {
+        document.querySelectorAll("input[name='scenario']").forEach(input => {
+            if (input.value === type) {
+                input.checked = true;
+            }
+        });
+    }
+
+    function clearConsole() {
+        const consoleEl = document.getElementById("terminalConsole");
+        consoleEl.innerHTML = '<div class="terminal-line"><span class="text-muted">[*] Console cleared. Waiting for actions...</span></div>';
+    }
+
+    async function runSimulation() {
+        const userId = document.getElementById("targetUser").value;
+        const scenarioInput = document.querySelector("input[name='scenario']:checked");
+        
+        if (!userId || !scenarioInput) {
+            alert("Please select a target user and a scenario.");
+            return;
+        }
+        
+        const scenario = scenarioInput.value;
+        const btn = document.getElementById("btnInject");
+        const consoleEl = document.getElementById("terminalConsole");
+        
+        // Disable button & animate spinner
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>INJECTING...';
+        
+        // Log to terminal console
+        writeToTerminal(`[+] INJECTING SECURITY INCIDENT: [${scenario.toUpperCase()}] on target User ID: ${userId}...`, "text-info");
+        
+        try {
+            const response = await fetch('/simulation/run', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token() if csrf_token else "" }}' # Flask-WTF CSRF protection
+                },
+                body: JSON.stringify({
+                    type: scenario,
+                    target_user_id: userId
+                })
+            });
+            
+            const result = await response.json();
+            
+            if (response.ok && result.status === 'success') {
+                writeToTerminal(`[SUCCESS] Simulation API responded. Injection complete.`, "text-success fw-bold");
+                writeToTerminal(`>> Message: ${result.details.message}`, "text-white");
+                writeToTerminal(`>> Posture Status: Clamped Trust Score to ${result.details.trust_score_after}/100`, "text-warning");
+                writeToTerminal(`>> ML Threat Assessment Classification: [${result.details.ml_rating}]`, result.details.ml_rating === 'HIGH_RISK' ? 'text-danger fw-bold' : 'text-warning');
+                
+                // Explanations (XAI)
+                writeToTerminal(`>> Explainable AI Risk Reasons:`, "text-info");
+                result.details.reasons.forEach(reason => {
+                    writeToTerminal(`   - ${reason}`, "text-muted");
+                });
+                
+                writeToTerminal(`[+] Security alerts generated and sent to monitoring feed.`, "text-success");
+                
+                // Reload window in 5 seconds to update lists, or let the user do it
+                writeToTerminal(`[*] Reloading active directory to sync trust scores in 3s...`, "text-muted");
+                setTimeout(() => {
+                    window.location.reload();
+                }, 3000);
+            } else {
+                writeToTerminal(`[ERROR] Injection failed: ${result.message}`, "text-danger fw-bold");
+            }
+        } catch (e) {
+            writeToTerminal(`[ERROR] Network error: ${e.message}`, "text-danger fw-bold");
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-radiation-hazard me-2"></i> INJECT ATTACK SCENARIO';
+        }
+    }
+    
+    function writeToTerminal(text, className) {
+        const consoleEl = document.getElementById("terminalConsole");
+        const timestamp = new Date().toLocaleTimeString();
+        const line = document.createElement("div");
+        line.className = `terminal-line ${className || 'text-light'}`;
+        line.innerHTML = `<span class="terminal-timestamp">[${timestamp}]</span> ${text}`;
+        consoleEl.appendChild(line);
+        consoleEl.scrollTop = consoleEl.scrollHeight;
+    }
+</script>
+{% endblock %}

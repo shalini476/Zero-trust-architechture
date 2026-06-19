@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<style>
+    /* Dashboard Wrapper Styles */
+    .wrapper {
+        display: flex;
+        width: 100%;
+        align-items: stretch;
+        min-height: 100vh;
+    }
+    
+    #sidebar {
+        min-width: 260px;
+        max-width: 260px;
+        background: rgba(10, 14, 26, 0.95);
+        backdrop-filter: blur(10px);
+        border-right: 1px solid var(--border-color);
+        color: #fff;
+        transition: all 0.3s;
+        z-index: 1000;
+        position: relative;
+    }
+    
+    #sidebar .sidebar-header {
+        padding: 1.5rem 1.25rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    #sidebar ul.components {
+        padding: 1.5rem 0.75rem;
+        margin-bottom: 80px; /* Leave space for profile footer */
+    }
+    
+    #sidebar ul li {
+        padding: 2px 0;
+    }
+    
+    #sidebar ul li a {
+        padding: 0.75rem 1rem;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        color: var(--text-muted);
+        text-decoration: none;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+        font-weight: 500;
+    }
+    
+    #sidebar ul li a i {
+        margin-right: 0.75rem;
+        font-size: 1.1rem;
+        width: 20px;
+        text-align: center;
+    }
+    
+    #sidebar ul li a:hover, #sidebar ul li.active > a {
+        color: var(--primary);
+        background: rgba(0, 242, 254, 0.05);
+        border-left: 3px solid var(--primary);
+    }
+    
+    #content-area {
+        width: 100%;
+        padding: 2rem;
+        min-height: 100vh;
+        background: transparent;
+        overflow-y: auto;
+    }
+    
+    .top-navbar {
+        background: rgba(17, 24, 39, 0.75);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--border-color);
+        padding: 0.75rem 2rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+    }
+    
+    .trust-badge-nav {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--border-color);
+        border-radius: 30px;
+        padding: 0.4rem 1rem;
+        display: inline-flex;
+        align-items: center;
+        font-weight: 600;
+        font-size: 0.85rem;
+    }
+</style>
+{% block dashboard_head %}{% endblock %}
+{% endblock %}
+
+{% block content %}
+<div class="wrapper">
+    <!-- Sidebar -->
+    <nav id="sidebar">
+        <div class="sidebar-header d-flex align-items-center gap-2">
+            <i class="fa-solid fa-shield-halved text-info fs-3"></i>
+            <div>
+                <h5 class="brand-glow mb-0" style="font-size: 1.15rem;">ZEROFOX</h5>
+                <span class="text-muted small" style="font-size: 0.75rem;">ZERO TRUST ARCH</span>
+            </div>
+        </div>
+
+        <ul class="list-unstyled components">
+            <li class="{% if request.blueprint == 'dashboard' %}active{% endif %}">
+                <a href="{{ url_for('dashboard.index') }}"><i class="fa-solid fa-gauge-high"></i> Dashboard</a>
+            </li>
+            
+            <li class="{% if request.blueprint == 'honeypot' %}active{% endif %}">
+                <a href="{{ url_for('honeypot.index') }}"><i class="fa-solid fa-hard-drive"></i> Secure Drive</a>
+            </li>
+            
+            {% if current_user.role == 'admin' %}
+            <li class="{% if request.endpoint == 'monitoring.logs' %}active{% endif %}">
+                <a href="{{ url_for('monitoring.logs') }}"><i class="fa-solid fa-list-check"></i> Activity Logs</a>
+            </li>
+            <li class="{% if request.endpoint == 'monitoring.alerts' %}active{% endif %}">
+                <a href="{{ url_for('monitoring.alerts') }}"><i class="fa-solid fa-bell"></i> Alerts Feed</a>
+            </li>
+            <li class="{% if request.blueprint == 'simulation' %}active{% endif %}">
+                <a href="{{ url_for('simulation.index') }}"><i class="fa-solid fa-bug"></i> Threat Simulator</a>
+            </li>
+            <li class="{% if request.blueprint == 'reports' %}active{% endif %}">
+                <a href="{{ url_for('reports.index') }}"><i class="fa-solid fa-file-invoice"></i> Reports Panel</a>
+            </li>
+            {% endif %}
+        </ul>
+
+        <div class="p-3 border-top border-secondary position-absolute bottom-0 w-100" style="background: rgba(0,0,0,0.2);">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+                <span class="small text-muted">User: <strong>{{ current_user.username }}</strong></span>
+                <span class="badge {% if current_user.role == 'admin' %}bg-info{% else %}bg-secondary{% endif %} text-white">{{ current_user.role | upper }}</span>
+            </div>
+            <div class="d-flex align-items-center justify-content-between">
+                <span class="small text-muted">Trust:</span>
+                <span class="fw-bold text-white" style="background-color: #000000; padding: 0.4rem 0.8rem; border-radius: 6px; display: inline-block;">{{ current_user.trust_score }}/100</span>
+            </div>
+            <hr class="my-2 border-secondary">
+            <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-danger btn-sm w-100"><i class="fa-solid fa-right-from-bracket me-2"></i>Sign Out</a>
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div id="content-area">
+        <!-- Top Navbar -->
+        <nav class="navbar top-navbar d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+                <span class="text-white fw-semibold"><i class="fa-solid fa-network-wired text-info me-2"></i> Zerofox Corporate IntraNet</span>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <div class="trust-badge-nav">
+                    <span class="text-muted me-1">Gateway Status:</span>
+                    <span class="dot dot-active me-2"></span>
+                    <span class="text-success small fw-semibold">PROTECTED</span>
+                </div>
+                
+                <div class="trust-badge-nav">
+                    <span class="text-muted me-2">Device IP:</span>
+                    <span class="text-white small fw-bold">{{ request.remote_addr }}</span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-custom alert-{{ category }} alert-dismissible fade show text-start mb-4" role="alert">
+                        <i class="fa-solid {% if category == 'success' %}fa-circle-check{% elif category == 'danger' %}fa-circle-xmark{% else %}fa-circle-exclamation{% endif %} me-2"></i>
+                        {{ message }}
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Dashboard views insert here -->
+        {% block dashboard_content %}{% endblock %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% block dashboard_scripts %}{% endblock %}
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="glass-card auth-card text-center" style="max-width: 500px;">
+        <!-- Logo / Icon -->
+        <div class="mb-4">
+            <div class="d-inline-flex align-items-center justify-content-center bg-dark rounded-circle border border-danger mb-3" style="width: 70px; height: 70px; box-shadow: 0 0 15px rgba(255, 23, 68, 0.25);">
+                <i class="fa-solid fa-triangle-exclamation text-danger" style="font-size: 2rem;"></i>
+            </div>
+            <h2 class="brand-glow mb-1 text-danger">STEP-UP SECURITY</h2>
+            <p class="text-muted small">Adaptive Identity Verification Required</p>
+        </div>
+
+        <!-- Flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-custom alert-{{ category }} alert-dismissible fade show text-start mb-4" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Explainable AI (XAI) Panel -->
+        <div class="card bg-dark border-danger text-start mb-4">
+            <div class="card-header bg-danger-subtle text-danger py-2 d-flex justify-content-between align-items-center">
+                <span class="fw-semibold small"><i class="fa-solid fa-microchip me-1"></i> UBA & AI Risk Assessment</span>
+                <span class="badge bg-danger">Risk: {{ session.get('behavioral_risk_score', 0) }}%</span>
+            </div>
+            <div class="card-body py-3 px-3">
+                <p class="text-light small mb-2">Your request was flagged for the following anomalies:</p>
+                <ul class="text-muted small mb-0 ps-3">
+                    {% if session.get('risk_reasons') %}
+                        {% for reason in session.get('risk_reasons') %}
+                            <li class="mb-1 text-warning"><i class="fa-solid fa-circle-exclamation text-warning me-1"></i> {{ reason }}</li>
+                        {% endfor %}
+                    {% else %}
+                        <li class="mb-1 text-warning"><i class="fa-solid fa-circle-exclamation text-warning me-1"></i> Trust Score below threshold of 80 (Current: {{ user.trust_score }}).</li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Security Question Form -->
+        <form method="POST" action="{{ url_for('auth.adaptive_verify') }}" class="text-start">
+            {{ form.hidden_tag() }}
+            
+            <div class="mb-4">
+                <label class="form-label text-info fw-semibold mb-2">Security Challenge Question:</label>
+                <p class="text-white border-bottom border-secondary pb-2 mb-3">{{ user.security_question }}</p>
+                
+                {{ form.security_answer.label(class="form-label") }}
+                {{ form.security_answer(class="form-control", placeholder="Type your answer here", autofocus=True) }}
+                {% for error in form.security_answer.errors %}
+                    <span class="text-danger small mt-1 d-block">{{ error }}</span>
+                {% endfor %}
+            </div>
+            
+            <div class="d-grid mb-3">
+                {{ form.submit(class="btn btn-primary-custom btn-lg") }}
+            </div>
+            
+            <p class="text-center text-muted small mb-0">
+                Cancel request? <a href="{{ url_for('auth.logout') }}" class="text-danger text-decoration-none fw-semibold">Cancel and Exit</a>
+            </p>
+        </form>
+    </div>
+</div>
+{% endblock %}
