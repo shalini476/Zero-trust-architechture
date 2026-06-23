@@ -120,6 +120,9 @@
             <li class="{% if request.endpoint == 'monitoring.alerts' %}active{% endif %}">
                 <a href="{{ url_for('monitoring.alerts') }}"><i class="fa-solid fa-bell"></i> Alerts Feed</a>
             </li>
+            <li class="{% if request.endpoint == 'monitoring.wfh_logs' %}active{% endif %}">
+                <a href="{{ url_for('monitoring.wfh_logs') }}"><i class="fa-solid fa-house-laptop"></i> WFH Security Logs</a>
+            </li>
             <li class="{% if request.blueprint == 'simulation' %}active{% endif %}">
                 <a href="{{ url_for('simulation.index') }}"><i class="fa-solid fa-bug"></i> Threat Simulator</a>
             </li>

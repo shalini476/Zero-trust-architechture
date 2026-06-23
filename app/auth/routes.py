@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request, session, Response
+from flask import Blueprint, render_template, redirect, url_for, flash, request, session, Response, jsonify
 from flask_login import login_user, logout_user, login_required, current_user
 from datetime import datetime, timedelta
 import secrets
@@ -13,8 +13,35 @@ from app.models import User, OTPRecord, ActivityLog, KnownDevice
 from app.auth.forms import LoginForm, RegisterForm, OTPForm, SecurityQuestionForm
 from app.ml.behavior_analyzer import analyze_user_behavior, update_user_baseline
 from app.ml.trust_engine import adjust_trust_score
+from app.ml.device_detector import get_request_context
+from app.ml.wfh_security import evaluate_login_security
 
 auth_bp = Blueprint('auth', __name__)
+
+
+@auth_bp.route('/store-client-ip', methods=['POST'])
+def store_client_ip():
+    """
+    Receives the browser-detected real public IP address (fetched client-side
+    from ipify.org) and stores it in the Flask session.
+
+    This is needed because when the app runs on localhost (127.0.0.1) the server
+    always sees 127.0.0.1 as remote_addr — even when the user is on a VPN.
+    By detecting the IP client-side and storing it here, get_real_ip() can use
+    the actual public IP for geolocation and VPN detection.
+
+    Called automatically by JavaScript on the login and OTP pages.
+    """
+    data = request.get_json(silent=True) or {}
+    ip = (data.get('ip') or '').strip()
+
+    # Basic sanity check — only store plausible public IPs
+    if ip and len(ip) <= 45 and ip not in ('127.0.0.1', '::1', '0.0.0.0'):
+        session['client_real_ip'] = ip
+
+    return jsonify({'stored': bool(session.get('client_real_ip'))})
+
+
 
 def generate_otp(user):
     """Generates a secure 6-digit OTP, saves it to the database, and returns it."""
@@ -122,13 +149,16 @@ def login():
                 flash('Your account has been deactivated by security administrators.', 'danger')
                 return redirect(url_for('auth.login'))
                 
-            # Log successful Step-1 credential verification
+            # Log successful Step-1 credential verification with real device info
+            req_ctx = get_request_context()
+            browser_detail = f"{req_ctx['browser']} | {req_ctx['os']} | {req_ctx['device_type']}"
             activity = ActivityLog(
                 user_id=user.id,
                 action='LOGIN_STEP1',
                 status='SUCCESS',
-                ip_address=request.remote_addr,
-                browser_info=request.headers.get('User-Agent', '')
+                ip_address=req_ctx['ip_address'],
+                browser_info=browser_detail,
+                location=req_ctx['location']
             )
             db.session.add(activity)
             db.session.commit()
@@ -220,6 +250,10 @@ def verify_otp():
             db.session.add(log)
             db.session.commit()
             
+            # Reward trust score for successful OTP verification (+5)
+            adjust_trust_score(user, 'otp_passed', ip_address=request.remote_addr)
+
+            
             # Run User Behavior Analytics (UBA)
             uba_results = analyze_user_behavior(
                 user=user,
@@ -252,6 +286,13 @@ def verify_otp():
                 
                 # Update trust score (+5 for successful login)
                 adjust_trust_score(user, 'success_login', ip_address=request.remote_addr)
+                
+                # Run WFH Security Check with real-time data
+                wfh_result = evaluate_login_security(
+                    user=user,
+                    device_fingerprint=device_fp,
+                    browser=session.get('login_browser', 'unknown_browser')
+                )
                 
                 # Update user behavior baseline
                 update_user_baseline(user, request.remote_addr, device_fp)
@@ -313,14 +354,17 @@ def adaptive_verify():
     
     if form.validate_on_submit():
         if user.check_security_answer(form.security_answer.data):
-            # Log success
+            # Log success with real device info
+            req_ctx = get_request_context()
+            browser_detail = f"{req_ctx['browser']} | {req_ctx['os']} | {req_ctx['device_type']}"
             log = ActivityLog(
                 user_id=user.id,
                 action='ADAPTIVE_VERIFY',
                 status='SUCCESS',
-                ip_address=request.remote_addr,
+                ip_address=req_ctx['ip_address'],
                 device_fingerprint=session.get('login_fingerprint'),
-                browser_info=session.get('login_browser')
+                browser_info=browser_detail,
+                location=req_ctx['location']
             )
             db.session.add(log)
             
@@ -337,6 +381,14 @@ def adaptive_verify():
                 
             # Log successful login and add trust score (+5)
             adjust_trust_score(user, 'success_login', ip_address=request.remote_addr)
+            
+            # Run WFH Security Check with real-time data
+            wfh_result = evaluate_login_security(
+                user=user,
+                device_fingerprint=device_fp,
+                browser=session.get('login_browser', 'unknown_browser')
+            )
+            
             update_user_baseline(user, request.remote_addr, device_fp)
             
             user.last_login = datetime.utcnow()

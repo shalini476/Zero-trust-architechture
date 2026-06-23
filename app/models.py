@@ -189,6 +189,45 @@ class MLPrediction(db.Model):
             return []
 
 
+class WFHLoginHistory(db.Model):
+    """
+    Per-login WFH telemetry record.
+    Created by evaluate_login_security() on every successful login.
+    Stores real geolocation coordinates so impossible travel can be
+    detected by computing haversine distance between successive records.
+    """
+    __tablename__ = 'wfh_login_history'
+
+    id           = db.Column(db.Integer, primary_key=True)
+    user_id      = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
+    timestamp    = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    ip_address   = db.Column(db.String(45), nullable=False)
+    latitude     = db.Column(db.Float, nullable=True)
+    longitude    = db.Column(db.Float, nullable=True)
+    city         = db.Column(db.String(100), default='Unknown')
+    region       = db.Column(db.String(100), default='')
+    country      = db.Column(db.String(100), default='Unknown')
+    country_code = db.Column(db.String(10), default='XX')
+    timezone     = db.Column(db.String(80), default='UTC')
+    isp          = db.Column(db.String(200), default='Unknown')
+    is_vpn       = db.Column(db.Boolean, default=False, nullable=False)
+    is_proxy     = db.Column(db.Boolean, default=False, nullable=False)
+    is_hosting   = db.Column(db.Boolean, default=False, nullable=False)
+    risk_score   = db.Column(db.Float, default=0.0)
+    flags        = db.Column(db.Text, default='[]')   # JSON list of flag strings
+
+    def set_flags(self, flags_list):
+        import json
+        self.flags = json.dumps(flags_list)
+
+    def get_flags(self):
+        import json
+        try:
+            return json.loads(self.flags)
+        except Exception:
+            return []
+
+
 class Simulation(db.Model):
     __tablename__ = 'simulations'
     

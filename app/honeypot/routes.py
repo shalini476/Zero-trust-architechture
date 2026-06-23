@@ -58,10 +58,19 @@ def log_safe_file_access(resource_name):
         status='SUCCESS',
         ip_address=request.remote_addr,
         resource_accessed=resource_name,
+        browser_info=request.headers.get('User-Agent', ''),
         risk_score=10.0 # Low risk
     )
     db.session.add(log)
     db.session.commit()
+    
+    # 1b. Reward trust score for legitimate file access (+2)
+    adjust_trust_score(
+        user=current_user,
+        event='safe_file_access',
+        ip_address=request.remote_addr,
+        detail=f'Authorized access: {resource_name}'
+    )
     
     # 2. Check for Insider Threat: Excessive file accesses (> 10 accesses in past hour)
     one_hour_ago = datetime.utcnow() - timedelta(hours=1)

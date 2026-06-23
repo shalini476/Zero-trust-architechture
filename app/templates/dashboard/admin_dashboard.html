@@ -70,6 +70,134 @@
         </div>
     </div>
 
+    <!-- WFH Security Summary Cards -->
+    <div class="row mb-4">
+        <div class="col-12 mb-2">
+            <h5 class="text-white fw-bold">
+                <i class="fa-solid fa-house-laptop text-info me-2"></i>WFH Security Overview
+            </h5>
+        </div>
+
+        <!-- WFH Total Checks -->
+        <div class="col-xl-4 col-md-6 mb-3">
+            <div class="glass-card p-3 d-flex align-items-center justify-content-between">
+                <div>
+                    <span class="text-muted small d-block">TOTAL WFH CHECKS</span>
+                    <h3 class="mb-0 text-info fw-bold mt-1">{{ wfh_total }}</h3>
+                </div>
+                <div class="bg-info-subtle text-info p-3 rounded-circle border border-info">
+                    <i class="fa-solid fa-network-wired fs-4"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- WFH Clean Logins -->
+        <div class="col-xl-4 col-md-6 mb-3">
+            <div class="glass-card p-3 d-flex align-items-center justify-content-between">
+                <div>
+                    <span class="text-muted small d-block">CLEAN LOGINS</span>
+                    <h3 class="mb-0 text-success fw-bold mt-1">{{ wfh_clean }}</h3>
+                </div>
+                <div class="bg-success-subtle text-success p-3 rounded-circle border border-success">
+                    <i class="fa-solid fa-wifi fs-4"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- WFH Flagged Logins -->
+        <div class="col-xl-4 col-md-6 mb-3">
+            <div class="glass-card p-3 d-flex align-items-center justify-content-between">
+                <div>
+                    <span class="text-muted small d-block">FLAGGED (VPN / TRAVEL)</span>
+                    <h3 class="mb-0 text-danger fw-bold mt-1">{{ wfh_flagged }}</h3>
+                </div>
+                <div class="bg-danger-subtle text-danger p-3 rounded-circle border border-danger">
+                    <i class="fa-solid fa-user-secret fs-4"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- WFH Security Check Logs Table -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="glass-card p-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="text-white fw-bold mb-0">
+                        <i class="fa-solid fa-shield-alt text-info me-2"></i>WFH Security Check Logs
+                    </h5>
+                    <div>
+                        <span class="badge bg-success me-1">Clean: {{ wfh_clean }}</span>
+                        <span class="badge bg-danger">Flagged: {{ wfh_flagged }}</span>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover table-dark bg-transparent mb-0">
+                        <thead>
+                            <tr class="border-secondary text-info">
+                                <th>Timestamp</th>
+                                <th>User</th>
+                                <th>Status</th>
+                                <th>Location</th>
+                                <th>Details</th>
+                                <th>Risk Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for log in wfh_logs %}
+                            <tr class="border-secondary align-middle">
+                                <td><small class="text-muted">{{ log.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</small></td>
+                                <td>
+                                    <strong class="text-light">
+                                        {{ log.user.username if log.user else 'Unknown' }}
+                                    </strong>
+                                </td>
+                                <td>
+                                    {% if log.status == 'FAILED' %}
+                                        <span class="badge bg-danger">
+                                            <i class="fa-solid fa-triangle-exclamation me-1"></i>FLAGGED
+                                        </span>
+                                    {% else %}
+                                        <span class="badge bg-success">
+                                            <i class="fa-solid fa-circle-check me-1"></i>CLEAN
+                                        </span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <small class="text-muted">
+                                        <i class="fa-solid fa-location-dot me-1"></i>
+                                        {{ log.location or 'Unknown' }}
+                                    </small>
+                                </td>
+                                <td>
+                                    <small class="text-muted">{{ log.browser_info or '-' }}</small>
+                                </td>
+                                <td>
+                                    {% set score = log.risk_score | int %}
+                                    {% if score >= 40 %}
+                                        <span class="badge bg-danger">{{ score }}</span>
+                                    {% elif score >= 20 %}
+                                        <span class="badge bg-warning text-dark">{{ score }}</span>
+                                    {% else %}
+                                        <span class="badge bg-success">{{ score }}</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="6" class="text-center text-muted py-4">
+                                    <i class="fa-solid fa-house-laptop fs-3 mb-2 d-block text-secondary"></i>
+                                    No WFH security checks recorded yet — log in to generate data.
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Analytics Charts Row -->
     <div class="row mb-4">
         <!-- Chart 1: Trust Score Distribution -->

@@ -79,34 +79,49 @@
 {% block scripts %}
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        // Collect basic characteristics to form a client-side device fingerprint
+        // ── Device Fingerprint ──────────────────────────────────────────
         const screenWidth = window.screen.width;
         const screenHeight = window.screen.height;
         const colorDepth = window.screen.colorDepth;
         const userAgent = navigator.userAgent;
         const timezoneOffset = new Date().getTimezoneOffset();
         const language = navigator.language;
-        
-        // Simple string builder for fingerprint
+
         const rawFingerprint = `${userAgent}|${screenWidth}x${screenHeight}|${colorDepth}|${timezoneOffset}|${language}`;
-        
-        // Hash it using a simple fast hash function (djb2) for clean representation
+
         let hash = 5381;
         for (let i = 0; i < rawFingerprint.length; i++) {
             hash = ((hash << 5) + hash) + rawFingerprint.charCodeAt(i);
         }
         const cleanFingerprint = "DEV_DEV_" + Math.abs(hash).toString(16).toUpperCase();
-        
-        // Browser recognition helper
+
         let browserName = "Unknown Browser";
         if (userAgent.includes("Firefox")) browserName = "Mozilla Firefox";
         else if (userAgent.includes("Chrome") && !userAgent.includes("Edg")) browserName = "Google Chrome";
         else if (userAgent.includes("Safari") && !userAgent.includes("Chrome")) browserName = "Apple Safari";
         else if (userAgent.includes("Edg")) browserName = "Microsoft Edge";
-        
-        // Set inputs
+
         document.getElementById("deviceFingerprint").value = cleanFingerprint;
         document.getElementById("browserName").value = browserName;
+
+        // ── Real Public IP Detection (for VPN detection on localhost) ───
+        // Fetches the browser's actual public IP from ipify.org and stores
+        // it in the Flask session so the server can geolocate the real IP
+        // even when Flask receives 127.0.0.1 as remote_addr.
+        fetch("https://api64.ipify.org?format=json", { cache: "no-store" })
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+                if (data && data.ip) {
+                    return fetch("{{ url_for('auth.store_client_ip') }}", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ ip: data.ip })
+                    });
+                }
+            })
+            .catch(function() {
+                // Silently fail — geolocation will fall back to remote_addr
+            });
     });
 
     function refreshCaptcha() {
@@ -115,3 +130,4 @@
     }
 </script>
 {% endblock %}
+

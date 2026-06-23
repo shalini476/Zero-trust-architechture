@@ -30,19 +30,23 @@ logger = logging.getLogger(__name__)
 
 # ── Trust event delta map ──────────────────────────────────────────────────────
 TRUST_EVENTS = {
-    'login_success':   +5,
-    'failed_login':    -5,
-    'new_device':      -5,
-    'unusual_time':    -10,
-    'mfa_passed':      +10,
-    'honeypot_access': -25,
-    'insider_threat':  -40,
-    'resource_access': -2,
-    'account_inactive':-5,
-    'security_review': +20,
-    'password_changed':+5,
-    'otp_failed':      -10,
-    'vpn_detected':    -30,  # WFH: VPN/proxy detected on login network
+    'login_success':     +5,   # successful login completes full auth chain
+    'success_login':     +5,   # alias used in auth routes
+    'failed_login':      -5,
+    'new_device':        -5,
+    'unusual_time':      -10,
+    'mfa_passed':        +10,
+    'otp_passed':        +5,   # successful OTP verification
+    'safe_file_access':  +2,   # user accessed an authorized file
+    'honeypot_access':   -25,
+    'insider_threat':    -40,
+    'ml_high_risk':      -30,  # ML engine classified behaviour as high risk
+    'resource_access':   -2,
+    'account_inactive':  -5,
+    'security_review':   +20,
+    'password_changed':  +5,
+    'otp_failed':        -10,
+    'vpn_detected':      -30,  # WFH: VPN/proxy detected on login network
     'untrusted_network': -25,  # WFH: login from a network not on the user's trusted list
     'impossible_travel': -40,  # WFH: simulated geolocation jump too fast to be real
 }

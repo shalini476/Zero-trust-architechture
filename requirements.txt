@@ -14,3 +14,5 @@ reportlab==4.1.0
 python-dotenv==1.0.1
 email-validator==2.1.1
 matplotlib==3.8.3
+requests>=2.31.0
+Pillow>=10.0.0

@@ -1,0 +1,179 @@
+{% extends 'dashboard_base.html' %}
+
+{% block dashboard_content %}
+<div class="container-fluid">
+
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0 text-white font-weight-bold">
+                <i class="fa-solid fa-house-laptop text-info me-2"></i>WFH Security Logs
+            </h1>
+            <p class="text-muted mb-0">VPN detection, network trust, location and risk score per login.</p>
+        </div>
+        <a href="{{ url_for('monitoring.logs') }}" class="btn btn-outline-secondary btn-sm">
+            <i class="fa-solid fa-arrow-left me-1"></i>All Logs
+        </a>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="row mb-4">
+        <div class="col-xl-4 col-md-6 mb-3">
+            <div class="glass-card p-3 d-flex align-items-center justify-content-between">
+                <div>
+                    <span class="text-muted small d-block">TOTAL WFH CHECKS</span>
+                    <h3 class="mb-0 text-info fw-bold mt-1">{{ total_checks }}</h3>
+                </div>
+                <div class="bg-info-subtle text-info p-3 rounded-circle border border-info">
+                    <i class="fa-solid fa-network-wired fs-4"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4 col-md-6 mb-3">
+            <div class="glass-card p-3 d-flex align-items-center justify-content-between">
+                <div>
+                    <span class="text-muted small d-block">CLEAN LOGINS</span>
+                    <h3 class="mb-0 text-success fw-bold mt-1">{{ clean_count }}</h3>
+                </div>
+                <div class="bg-success-subtle text-success p-3 rounded-circle border border-success">
+                    <i class="fa-solid fa-wifi fs-4"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4 col-md-6 mb-3">
+            <div class="glass-card p-3 d-flex align-items-center justify-content-between">
+                <div>
+                    <span class="text-muted small d-block">FLAGGED (VPN / TRAVEL)</span>
+                    <h3 class="mb-0 text-danger fw-bold mt-1">{{ flagged_count }}</h3>
+                </div>
+                <div class="bg-danger-subtle text-danger p-3 rounded-circle border border-danger">
+                    <i class="fa-solid fa-user-secret fs-4"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- WFH Logs Table -->
+    <div class="row">
+        <div class="col-12">
+            <div class="glass-card p-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="text-white fw-bold mb-0">
+                        <i class="fa-solid fa-shield-alt text-info me-2"></i>WFH Security Check Logs
+                    </h5>
+                    <div>
+                        <span class="badge bg-success me-1">Clean: {{ clean_count }}</span>
+                        <span class="badge bg-danger">Flagged: {{ flagged_count }}</span>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover table-dark bg-transparent mb-0">
+                        <thead>
+                            <tr class="border-secondary text-info">
+                                <th>Timestamp</th>
+                                <th>User</th>
+                                <th>Status</th>
+                                <th>Location</th>
+                                <th>Details</th>
+                                <th>Risk Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for log in logs %}
+                            <tr class="border-secondary align-middle">
+                                <td>
+                                    <small class="text-muted">
+                                        {{ log.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}
+                                    </small>
+                                </td>
+                                <td>
+                                    <strong class="text-light">
+                                        {{ log.user.username if log.user else 'Unknown' }}
+                                    </strong>
+                                </td>
+                                <td>
+                                    {% if log.status == 'FAILED' %}
+                                        <span class="badge bg-danger">
+                                            <i class="fa-solid fa-triangle-exclamation me-1"></i>FLAGGED
+                                        </span>
+                                    {% else %}
+                                        <span class="badge bg-success">
+                                            <i class="fa-solid fa-circle-check me-1"></i>CLEAN
+                                        </span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <small class="text-muted">
+                                        <i class="fa-solid fa-location-dot me-1"></i>
+                                        {{ log.location or 'Unknown' }}
+                                    </small>
+                                </td>
+                                <td>
+                                    <small class="text-muted">{{ log.browser_info or '-' }}</small>
+                                </td>
+                                <td>
+                                    {% set score = log.risk_score | int %}
+                                    {% if score >= 40 %}
+                                        <span class="badge bg-danger">{{ score }}</span>
+                                    {% elif score >= 20 %}
+                                        <span class="badge bg-warning text-dark">{{ score }}</span>
+                                    {% else %}
+                                        <span class="badge bg-success">{{ score }}</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="6" class="text-center text-muted py-4">
+                                    <i class="fa-solid fa-house-laptop fs-3 mb-2 d-block text-secondary"></i>
+                                    No WFH security checks recorded yet — log in to generate data.
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                {% if pagination.pages > 1 %}
+                <nav class="mt-3">
+                    <ul class="pagination pagination-sm justify-content-center mb-0">
+                        {% if pagination.has_prev %}
+                        <li class="page-item">
+                            <a class="page-link bg-dark border-secondary text-info"
+                               href="{{ url_for('monitoring.wfh_logs', page=pagination.prev_num) }}">
+                                &laquo; Prev
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% for p in pagination.iter_pages() %}
+                            {% if p %}
+                            <li class="page-item {% if p == pagination.page %}active{% endif %}">
+                                <a class="page-link bg-dark border-secondary text-info"
+                                   href="{{ url_for('monitoring.wfh_logs', page=p) }}">{{ p }}</a>
+                            </li>
+                            {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link bg-dark border-secondary text-muted">…</span>
+                            </li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if pagination.has_next %}
+                        <li class="page-item">
+                            <a class="page-link bg-dark border-secondary text-info"
+                               href="{{ url_for('monitoring.wfh_logs', page=pagination.next_num) }}">
+                                Next &raquo;
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

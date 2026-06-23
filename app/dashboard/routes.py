@@ -22,20 +22,38 @@ def admin_dashboard():
     users = User.query.all()
     recent_alerts = Alert.query.filter_by(is_resolved=False).order_by(Alert.timestamp.desc()).limit(5).all()
     recent_logs = ActivityLog.query.order_by(ActivityLog.timestamp.desc()).limit(5).all()
-    
+
+    # --- WFH Security Check Logs (latest 20) ---
+    wfh_logs = (
+        ActivityLog.query
+        .filter(ActivityLog.action == 'WFH_SECURITY_CHECK')
+        .order_by(ActivityLog.timestamp.desc())
+        .limit(20)
+        .all()
+    )
+
     # Calculate some summary stats
     total_users = len(users)
     active_users = sum(1 for u in users if u.is_active)
     unresolved_count = Alert.query.filter_by(is_resolved=False).count()
-    
+
+    # WFH summary stats for the dashboard cards
+    wfh_total   = len(wfh_logs)
+    wfh_flagged = sum(1 for l in wfh_logs if l.status == 'FAILED')
+    wfh_clean   = wfh_total - wfh_flagged
+
     # Calculate average trust score
     avg_trust = int(sum(u.trust_score for u in users) / total_users) if total_users > 0 else 100
-    
+
     return render_template(
         'dashboard/admin_dashboard.html',
         users=users,
         recent_alerts=recent_alerts,
         recent_logs=recent_logs,
+        wfh_logs=wfh_logs,
+        wfh_total=wfh_total,
+        wfh_flagged=wfh_flagged,
+        wfh_clean=wfh_clean,
         total_users=total_users,
         active_users=active_users,
         unresolved_count=unresolved_count,
@@ -48,16 +66,26 @@ def user_dashboard():
     """User Personal Security Dashboard showing their security standing."""
     # Retrieve user's personal logs
     personal_logs = ActivityLog.query.filter_by(user_id=current_user.id).order_by(ActivityLog.timestamp.desc()).limit(10).all()
-    
+
+    # Retrieve user's WFH security check logs
+    wfh_logs = (
+        ActivityLog.query
+        .filter_by(user_id=current_user.id)
+        .filter(ActivityLog.action == 'WFH_SECURITY_CHECK')
+        .order_by(ActivityLog.timestamp.desc())
+        .limit(5)
+        .all()
+    )
+
     # Retrieve user's personal alerts
     personal_alerts = Alert.query.filter_by(user_id=current_user.id, is_resolved=False).order_by(Alert.timestamp.desc()).all()
-    
+
     # Retrieve user's registered devices
     devices = KnownDevice.query.filter_by(user_id=current_user.id).all()
-    
+
     # Retrieve user's latest ML evaluation profile
     latest_ml = MLPrediction.query.filter_by(user_id=current_user.id).order_by(MLPrediction.timestamp.desc()).first()
-    
+
     # Determine general security status text
     if current_user.trust_score >= 80:
         status_text = "TRUSTED"
@@ -68,11 +96,12 @@ def user_dashboard():
     else:
         status_text = "SUSPENDED_THREAT"
         status_class = "danger"
-        
+
     return render_template(
         'dashboard/user_dashboard.html',
         personal_logs=personal_logs,
         personal_alerts=personal_alerts,
+        wfh_logs=wfh_logs,
         devices=devices,
         latest_ml=latest_ml,
         status_text=status_text,
