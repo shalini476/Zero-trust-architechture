@@ -10,7 +10,9 @@ from app.ml.trust_engine import adjust_trust_score
 from app.ml.threat_engine import predict_threat_level
 from app.ml.explainable_ai import generate_xai_explanations
 
-simulation_bp = Blueprint('simulation', __name__)
+simulation_bp = Blueprint('simulation', __name__)   
+
+
 
 @simulation_bp.route('/')
 @login_required
